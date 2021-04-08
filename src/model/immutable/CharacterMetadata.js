@@ -110,6 +110,12 @@ class CharacterMetadata extends CharacterMetadataRecord {
     return newCharacter;
   }
 
+  static clear(): void {
+    pool = Map([
+      [Map(defaultRecord), EMPTY],
+    ]);
+  }
+
   static fromJS({
     style,
     entity,
