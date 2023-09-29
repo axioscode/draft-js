@@ -1,4 +1,4 @@
-branches: [master, publish_to_ghp]
+branches: [master]
 plugins:
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
