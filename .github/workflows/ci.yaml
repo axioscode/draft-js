@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  workflow_dispatch: {}
+  push: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write # to be able to publish to the GitHub Package Registry
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: lts/*
+          registry-url: https://npm.pkg.github.com
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn test
+
+      - run: yarn lint
+
+      - run: npx semantic-release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
