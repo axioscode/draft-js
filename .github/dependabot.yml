@@ -1,0 +1,23 @@
+version: 2
+
+registries:
+  npmjs-org:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: "${{secrets.NPM_REGISTRY_REGISTRY_NPMJS_ORG_TOKEN}}"
+
+updates:
+  - directory: /
+    package-ecosystem: npm
+    registries:
+      - npmjs-org
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          # Ignore all version bumps. "Security updates are unaffected by this setting."
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
+    reviewers: ["@axioscode/pt-reviewers-dependabot"]
