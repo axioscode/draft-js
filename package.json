@@ -1,7 +1,7 @@
 {
   "name": "@axioscode/draft-js",
   "description": "A React framework for building text editors.",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "keywords": [
     "draftjs",
     "editor",
