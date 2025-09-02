@@ -1,3 +1,4 @@
+import { createRoot } from "react-dom/client";
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
  *
@@ -18,7 +19,5 @@ import TeXEditorExample from './components/TeXEditorExample';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-ReactDOM.render(
-  <TeXEditorExample />,
-  document.getElementById('target'),
-);
+const root = createRoot(document.getElementById('target'));
+root.render(<TeXEditorExample />);

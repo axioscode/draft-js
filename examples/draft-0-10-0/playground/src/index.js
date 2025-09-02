@@ -1,3 +1,4 @@
+import { createRoot } from "react-dom/client";
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
  *
@@ -23,5 +24,6 @@ import registerServiceWorker from './registerServiceWorker';
 
 console.log("Applying feature flag overwrites: ", GkManager);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
 registerServiceWorker();

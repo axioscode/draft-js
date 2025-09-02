@@ -28,7 +28,6 @@ import type {BidiDirection} from 'UnicodeBidiDirection';
 const DraftEditorNode = require('DraftEditorNode.react');
 const DraftOffsetKey = require('DraftOffsetKey');
 const React = require('React');
-const ReactDOM = require('ReactDOM');
 const Scroll = require('Scroll');
 const Style = require('Style');
 
@@ -236,7 +235,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
       return;
     }
 
-    const blockNode = ReactDOM.findDOMNode(this);
+    const blockNode = this._blockNode;
     const scrollParent = Style.getScrollParent(blockNode);
     const scrollPosition = getScrollPosition(scrollParent);
     let scrollDelta;
@@ -380,7 +379,14 @@ class DraftEditorBlockNode extends React.Component<Props> {
     );
 
     // root block nodes needs to be wrapped
-    return React.createElement(Element, elementProps, blockNode);
+    return React.createElement(
+      Element,
+      {
+        ...elementProps,
+        ref: el => (this._blockNode = el),
+      },
+      blockNode,
+    );
   }
 }
 

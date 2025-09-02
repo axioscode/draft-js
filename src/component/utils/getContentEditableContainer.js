@@ -13,20 +13,18 @@
 
 import type DraftEditor from 'DraftEditor.react';
 
-const ReactDOM = require('ReactDOM');
-
 const invariant = require('invariant');
 const isHTMLElement = require('isHTMLElement');
 
 function getContentEditableContainer(editor: DraftEditor): HTMLElement {
-  const editorNode = ReactDOM.findDOMNode(editor.editorContainer);
+  // editor.editorContainer is already a DOM node via ref assignment; React 19 removed findDOMNode
+  const editorNode = editor.editorContainer;
   invariant(editorNode, 'Missing editorNode');
   invariant(
     isHTMLElement(editorNode.firstChild),
     'editorNode.firstChild is not an HTMLElement',
   );
-  const htmlElement = (editorNode.firstChild: any);
-  return htmlElement;
+  return (editorNode.firstChild: any);
 }
 
 module.exports = getContentEditableContainer;

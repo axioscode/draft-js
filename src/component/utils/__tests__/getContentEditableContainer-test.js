@@ -11,45 +11,26 @@
 
 'use strict';
 
-jest.mock('ReactDOM');
-
 const getContentEditableContainer = require('getContentEditableContainer');
 
 test('fails if no Node is found for the editorContainer', () => {
-  /* $FlowFixMe(>=0.99.0 site=www) This comment suppresses an error found when
-   * Flow v0.99 was deployed. To see the error delete this comment and run
-   * Flow. */
-  require('ReactDOM').findDOMNode.mockImplementation(() => null);
-  // $FlowExpectedError
+  // $FlowExpectedError - missing editorContainer
   expect(() => getContentEditableContainer({})).toThrow('Missing editorNode');
 });
 
-test('fails if the firstChild of editorConainer is not an HTMLElement', () => {
-  const editor = {editorContainer: {}};
-  const editableContainer = document.createTextNode('text');
-  const editorContainerNode = {firstChild: editableContainer};
-  /* $FlowFixMe(>=0.99.0 site=www) This comment suppresses an error found when
-   * Flow v0.99 was deployed. To see the error delete this comment and run
-   * Flow. */
-  require('ReactDOM').findDOMNode.mockImplementation(() => editorContainerNode);
-  // $FlowExpectedError
-  expect(() => getContentEditableContainer(editor)).toThrow(
+test('fails if the firstChild of editorContainer is not an HTMLElement', () => {
+  const editorContainer = {firstChild: document.createTextNode('text')};
+  // $FlowExpectedError firstChild not HTMLElement
+  expect(() => getContentEditableContainer({editorContainer})).toThrow(
     'editorNode.firstChild is not an HTMLElement',
   );
 });
 
-test(`returns the firstChild of editor.editorContainer's DOM node`, () => {
-  const editor = {editorContainer: {}};
+test("returns the firstChild of editor.editorContainer's DOM node", () => {
   const editableContainer = document.createElement('div');
-  const editorContainerNode = {firstChild: editableContainer};
-  /* $FlowFixMe(>=0.99.0 site=www) This comment suppresses an error found when
-   * Flow v0.99 was deployed. To see the error delete this comment and run
-   * Flow. */
-  require('ReactDOM').findDOMNode.mockImplementation(() => editorContainerNode);
-
-  // $FlowExpectedError
-  expect(getContentEditableContainer(editor)).toBe(editableContainer);
-  expect(require('ReactDOM').findDOMNode).toHaveBeenCalledWith(
-    editor.editorContainer,
+  const editorContainer = {firstChild: editableContainer};
+  // $FlowExpectedError - editor shape simplified for test
+  expect(getContentEditableContainer({editorContainer})).toBe(
+    editableContainer,
   );
 });

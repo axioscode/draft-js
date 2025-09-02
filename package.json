@@ -1,7 +1,7 @@
 {
   "name": "@axioscode/draft-js",
   "description": "A React framework for building text editors.",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "keywords": [
     "draftjs",
     "editor",
@@ -46,8 +46,8 @@
     "object-assign": "^4.1.1"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0-rc || ^16.0.0-rc || ^16.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0-rc || ^16.0.0-rc || ^16.0.0"
+    "react": ">=16.8.0 <20",
+    "react-dom": ">=16.8.0 <20"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -82,9 +82,9 @@
     "gulp-util": "^3.0.6",
     "jest": "^24.9.0",
     "prettier": "1.19.1",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-test-renderer": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-test-renderer": "^19.0.0",
     "semantic-release": "^22.0.5",
     "stats-webpack-plugin": "^0.6.2",
     "through2": "^3.0.1",

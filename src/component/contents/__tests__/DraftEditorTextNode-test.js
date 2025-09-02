@@ -30,7 +30,19 @@ beforeEach(() => {
 });
 
 const renderIntoContainer = element => {
-  return ReactDOM.render(element, container);
+  let instance = null;
+  const withRef = React.cloneElement(element, {ref: i => (instance = i)});
+  if (ReactDOM.createRoot) {
+    if (!renderIntoContainer._root) {
+      renderIntoContainer._root = ReactDOM.createRoot(container);
+    }
+    renderIntoContainer._root.render(withRef);
+  } else if (ReactDOM.render) {
+    instance = ReactDOM.render(withRef, container);
+  } else {
+    throw new Error('No suitable ReactDOM render method found');
+  }
+  return instance;
 };
 
 const initializeAsIE = () => {
@@ -48,8 +60,11 @@ const initializeAsNonIE = () => {
 };
 
 const expectPopulatedSpan = (stub, testString) => {
-  // $FlowExpectedError node could be null
-  const node: Element = ReactDOM.findDOMNode(stub);
+  const node = stub._node;
+  expect(node).toBeTruthy();
+  if (!node) {
+    throw new Error('Expected node to exist');
+  }
   expect(node.tagName).toBe('SPAN');
   expect(node.childNodes.length).toBe(1);
   expect(node.firstChild && node.firstChild.textContent).toBe(testString);
@@ -60,8 +75,7 @@ test('must initialize correctly with an empty string, non-IE', function() {
   const stub = renderIntoContainer(
     <DraftEditorTextNode>{''}</DraftEditorTextNode>,
   );
-  // $FlowExpectedError we know node is an Element
-  expect(ReactDOM.findDOMNode(stub).tagName).toBe('BR');
+  expect(stub._node && stub._node.tagName).toBe('BR');
 });
 
 test('must initialize correctly with an empty string, IE', function() {
@@ -187,8 +201,7 @@ test('must update from non-empty to empty, non-IE', function() {
 
   renderIntoContainer(<DraftEditorTextNode>{''}</DraftEditorTextNode>);
 
-  // $FlowExpectedError we know node is an Element
-  expect(ReactDOM.findDOMNode(stub).tagName).toBe('BR');
+  expect(stub._node && stub._node.tagName).toBe('BR');
 });
 
 test('must update from non-empty to empty, IE', function() {
@@ -217,11 +230,11 @@ test('must force unchanged text back into the DOM', function() {
     <DraftEditorTextNode>{TEST_A}</DraftEditorTextNode>,
   );
 
-  // $FlowExpectedError we know node is not null
-  ReactDOM.findDOMNode(stub).textContent = TEST_B;
+  if (stub._node) {
+    stub._node.textContent = TEST_B;
+  }
 
   renderIntoContainer(<DraftEditorTextNode>{TEST_A}</DraftEditorTextNode>);
 
-  // $FlowExpectedError we know node is not null
-  expect(ReactDOM.findDOMNode(stub).textContent).toBe(TEST_A);
+  expect(stub._node && stub._node.textContent).toBe(TEST_A);
 });
